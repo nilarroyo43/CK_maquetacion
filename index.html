@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elias-CK</title>
+    <style>
+        /* --- ESTILOS GENERALES (Reset) --- */
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        /* --- 1. PANTALLA LOGIN --- */
+        #screen-login {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('fondo.jpg') no-repeat center center/cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 400;
+        }
+
+        .login-logo {
+            width: 500px;
+            margin-bottom: 40px;
+
+        }
+
+        /* ESTILO NUEVO: BARRA AMARILLA TIPO "INDUSTRIAL" */
+        .access-bar {
+            background-color: #ffffff;
+            /* Amarillo intenso */
+            display: flex;
+            align-items: center;
+            padding: 5px;
+            /* El borde amarillo alrededor del botón */
+            width: 320px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            /* Sombra para que destaque sobre la foto */
+        }
+
+        .access-bar input {
+            flex-grow: 1;
+            /* Ocupa todo el espacio sobrante */
+            background: transparent;
+            border: none;
+            outline: none;
+            padding: 10px 15px;
+            font-family: 'Courier New', Courier, monospace;
+            /* Fuente máquina de escribir */
+            font-size: 16px;
+            font-weight: bold;
+            color: #000;
+            text-transform: uppercase;
+        }
+
+        .access-bar input::placeholder {
+            color: #333;
+            opacity: 0.7;
+        }
+
+        .access-bar button {
+            background-color: #000;
+            color: #fdfdfd;
+            border: none;
+            padding: 12px 10px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: uppercase;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: background 0.3s;
+        }
+
+        .access-bar button:hover {
+            background-color: #333;
+        }
+
+        .error-msg {
+            color: #FFD700;
+            /* Amarillo para el error también */
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            margin-top: 15px;
+            display: none;
+            font-weight: bold;
+            background: #000;
+            /* Fondo negro para que se lea */
+            padding: 5px 10px;
+        }
+
+        .input-box {
+            background: transparent;
+            border: 2px solid #fff;
+            color: #fff;
+            padding: 15px 30px;
+            /* Un poco más grande para móvil */
+            text-align: center;
+            font-size: 16px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            width: 220px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-box::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .input-box:focus {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .error-msg {
+            color: red;
+            font-size: 14px;
+            margin-top: 15px;
+            display: none;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px;
+        }
+
+        /* --- 2. PANTALLA VIDEO --- */
+        #screen-video {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            display: none;
+            z-index: 300;
+            justify-content: center;
+            align-items: center;
+        }
+
+        video { width: 100%; height: 100%; object-fit: cover; }
+
+        #video-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #000;
+            opacity: 0; /* Invisible al principio */
+            transition: opacity 1.5s ease; /* Tarda 1.5s en oscurecerse */
+            pointer-events: none; /* Para que no bloquee clics si los hubiera */
+            z-index: 310; /* Encima del video */
+        }
+
+        /* Clase que activaremos con JS para oscurecer */
+        #video-overlay.fade-active {
+            opacity: 1; /* Totalmente negro */
+        }
+
+        /* --- 3. PANTALLA MENÚ PRINCIPAL (Fondo Negro) --- */
+        #screen-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            /* CAMBIO RESPONSIVE: */
+            justify-content: center;
+            /* Todo al centro del lienzo */
+            gap: 60px;
+            /* Separación fija entre logo y enlaces */
+            z-index: 200;
+        }
+
+        .menu-logo {
+            width: 350px;
+            max-width: 80%;
+            /* ESTADO INICIAL: Invisible para que la animación lo muestre */
+            opacity: 0;
+            /* ANIMACIÓN: Dura 1.5s, curva suave */
+            animation: logoEntrance 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            /* RETRASO: Espera 0.2s tras acabar el video */
+            animation-delay: 0.2s;
+        }
+
+        .menu-links {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .menu-btn {
+            color: #fff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 20px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+
+            /* ANIMACIÓN TEXTOS */
+            opacity: 0;
+            /* Invisible al inicio */
+            animation: textEntrance 0.8s ease-out forwards;
+        }
+
+        .menu-btn:hover {
+            opacity: 0.6;
+        }
+
+        /* --- 4. PANTALLA CONTENIDO (Inner Pages) --- */
+        #screen-content {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            display: none;
+            z-index: 100;
+            overflow-y: auto;
+        }
+
+        .content-header {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.98);
+            padding: 10px 0;
+            text-align: center;
+            cursor: pointer;
+            z-index: 10;
+            border-bottom: 2px solid #000;
+        }
+
+        .header-logo {
+            width: 180px;
+        }
+
+        .section-wrapper {
+            padding: 40px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+            display: none;
+            text-align: center;
+            /* Centramos el contenido por defecto */
+        }
+
+        .section-wrapper.active {
+            display: block;
+        }
+
+        /* --- 5. ESTILOS LOOKBOOK DARK --- */
+        .look-slide {
+            height: 90vh;
+            /* Cada bloque ocupa casi toda la altura de la pantalla */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            scroll-snap-align: start;
+            /* Efecto de "imán" al deslizar */
+        }
+
+        .look-slide img {
+            height: 60vh;
+            /* 60% de la altura visible (tu requisito) */
+            width: auto;
+            /* El ancho se ajusta solo */
+            max-width: 100%;
+            object-fit: cover;
+        }
+
+        /* Contenedor para activar el scroll suave */
+        .lookbook-gallery {
+            width: 100%;
+        }
+        /* --- ESTILOS CONTACTO (Perfil Creador) --- */
+        .contact-layout {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 60px;
+            max-width: 1000px;
+            margin: 60px auto;
+            text-align: left;
+        }
+
+        /* Columna Izquierda: Foto + Datos */
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            width: 350px; /* Ancho fijo igual que la foto */
+            flex-shrink: 0;
+            gap: 25px; /* Separación entre foto y datos */
+        }
+
+        .creator-photo {
+            width: 100%;
+            height: 450px;
+            object-fit: cover;
+            box-shadow: 15px 15px 0px rgba(0,0,0,0.4);
+        }
+
+        /* Columna Derecha: Solo Texto */
+        .right-column {
+            flex-grow: 1; /* Ocupa el resto del espacio */
+            padding-top: 10px; /* Un pequeño ajuste visual para alinear con la foto */
+        }
+
+        .right-column h2 {
+            font-size: 36px;
+            margin-top: 0;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            line-height: 1;
+        }
+
+        .text-block {
+            font-size: 16px;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+        
+        .text-block p { margin-bottom: 25px; }
+
+        /* LISTA DE CONTACTO (Ahora bajo la foto) */
+        .contact-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column; /* Lista vertical para que se lea bien bajo la foto */
+            gap: 12px;
+            font-size: 14px;
+            letter-spacing: 1px;
+            border-top: 2px solid rgba(255,255,255,0.2); /* Línea separadora sutil */
+            padding-top: 20px;
+        }
+
+        .contact-list li {
+            display: flex;
+            justify-content: space-between; /* Texto a los extremos */
+            border-bottom: 1px solid rgba(255,255,255,0.1); /* Líneas finas entre datos */
+            padding-bottom: 5px;
+        }
+
+        .contact-list strong {
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* Responsive: En móvil todo uno debajo de otro */
+        @media (max-width: 900px) {
+            .contact-layout { flex-direction: column; align-items: center; }
+            .left-column { width: 100%; max-width: 350px; }
+            .right-column { width: 100%; max-width: 500px; text-align: center; }
+            /* En móvil, ponemos el texto primero y la foto/datos después (opcional) */
+            /* .contact-layout { flex-direction: column-reverse; } */
+        }
+
+       /* --- ESTILOS E-COMMERCE (3 COLUMNAS FIJAS) --- */
+        .product-layout {
+            display: grid;
+            /* Definimos las 3 columnas: Izquierda (Flexible) | Centro (500px fijo) | Derecha (Flexible) */
+            grid-template-columns: 1fr 500px 1fr; 
+            gap: 40px;
+            height: 85vh; 
+            max-width: 1400px;
+            margin: 0 auto;
+            align-items: start;
+            padding-top: 20px;
+        }
+
+        /* COLUMNA IZQUIERDA: Info Técnica */
+        .info-left {
+            text-align: left;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #333;
+            padding-left: 20px;
+        }
+        .info-left h3 { font-size: 14px; text-transform: uppercase; margin-bottom: 15px; }
+        .info-left ul { list-style: none; padding: 0; }
+        .info-left li::before { content: "· "; }
+
+        /* COLUMNA CENTRAL: Galería Scrollable */
+        .gallery-center {
+            height: 100%; 
+            overflow-y: auto; 
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
+            display: flex;
+            flex-direction: column;
+            
+            /* Configuración Scroll Imán */
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+
+            /* Truco para que aparezca suave (evita parpadeo del clon) */
+            opacity: 0; 
+            transition: opacity 0.5s ease;
+        }
+        
+        /* Esta clase la añade el JS cuando está listo */
+        .gallery-center.loaded { opacity: 1; }
+
+        .gallery-center::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+
+        .gallery-center img {
+            width: 100%;
+            height: 100%; /* Forza altura completa */
+            object-fit: cover;
+            display: block;
+            flex-shrink: 0;
+            scroll-snap-align: start; /* El Imán */
+            scroll-snap-stop: always;
+        }
+
+        /* COLUMNA DERECHA: Compra */
+        .actions-right {
+            text-align: left;
+            padding-right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .price-tag { font-size: 16px; font-weight: bold; }
+        .tax-info { font-size: 11px; color: #666; margin-top: -15px; }
+        
+        .size-select {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            background: #fff;
+            text-transform: uppercase;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .btn-add {
+            background-color: #000;
+            color: #fff;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            text-transform: uppercase;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-add:hover { background-color: #333; }
+
+        .wishlist-link {
+            font-size: 11px;
+            text-decoration: underline;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        /* RESPONSIVE: Solo pasa a 1 columna si la pantalla es MUY pequeña (móvil vertical) */
+        @media (max-width: 900px) {
+            .product-layout {
+                grid-template-columns: 1fr;
+                height: auto;
+                overflow-y: visible;
+            }
+            .gallery-center { overflow-y: visible; height: auto; }
+            .gallery-center img { height: auto; } /* En móvil altura automática */
+            .gallery-center { order: 1; }
+            .actions-right { order: 2; padding: 20px; }
+            .info-left { order: 3; padding: 20px; }
+        }
+        
+        /* --- ANIMACIONES DE ENTRADA  --- */
+
+        /*  Efecto Zoom para el Logo */
+        @keyframes logoEntrance {
+            from {
+                transform: scale(0.4);
+                /* Empieza pequeño (al fondo) */
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                /* Termina tamaño normal */
+                opacity: 1;
+            }
+        }
+
+        /* 2. Efecto Subir para los Textos */
+        @keyframes textEntrance {
+            from {
+                transform: translateY(40px);
+                /* Empieza más abajo */
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                /* Termina en su sitio */
+                opacity: 1;
+            }
+        }
+
+        /* --- ORDEN DE APARICIÓN DE LOS TEXTOS --- */
+        /* El primero entra a la vez que el logo empieza a ser visible */
+        .menu-links a:nth-child(1) {
+            animation-delay: 0.3s;
+        }
+
+        .menu-links a:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        .menu-links a:nth-child(3) {
+            animation-delay: 0.7s;
+        }
+
+        .menu-links a:nth-child(4) {
+            animation-delay: 0.9s;
+        }
+
+        /* --- ANIMACIONES DE FLUIDEZ PARA LAS PESTAÑAS --- */
+
+        /* 1. Definimos el movimiento: De abajo a arriba y apareciendo */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px); /* Empieza 30px más abajo */
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0); /* Termina en su sitio */
+            }
+        }
+
+        /* 2. Aplicamos la animación al contenedor principal de la sección */
+        .section-wrapper.active {
+            /* Se asegura de que la animación se dispare cada vez que entras */
+            animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        /* 3. EFECTO CASCADA (Staggering) */
+        /* Hacemos que los elementos de dentro aparezcan uno tras otro, no todos a la vez */
+        
+        /* Títulos (h1, h2) aparecen rápido */
+        .section-wrapper.active h1, 
+        .section-wrapper.active h2 {
+            opacity: 0; /* Empiezan invisibles */
+            animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.1s; /* Retraso 0.1s */
+        }
+
+        /* Textos (p) y bloques de texto aparecen un poco después */
+        .section-wrapper.active p, 
+        .section-wrapper.active .text-block {
+            opacity: 0;
+            animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.2s; /* Retraso 0.2s */
+        }
+
+        /* Elementos grandes (Fotos, Grids, Columnas) aparecen al final */
+        .section-wrapper.active img, 
+        .section-wrapper.active .product-grid, 
+        .section-wrapper.active .lookbook-gallery,
+        .section-wrapper.active .contact-layout {
+            opacity: 0;
+            animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.3s; /* Retraso 0.3s */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="screen-login">
+        <img src="CK_logoW.png" alt="Logo" class="login-logo">
+
+        <div class="access-bar">
+            <input type="text" id="pass-input" placeholder="Código" autocomplete="off">
+            <button onclick="checkPass()">ENTRAR</button>
+        </div>
+
+        <div id="error-msg" class="error-msg">CÓDIGO INCORRECTO</div>
+    </div>
+
+    <div id="screen-video">
+        <video id="intro-vid" muted playsinline>
+            <source src="video_metro.mp4" type="video/mp4">
+        </video>
+        <div id="video-overlay"></div>
+    </div>
+
+    <div id="screen-menu">
+        <img src="CK_logoW.png" alt="Logo" class="menu-logo">
+
+        <div class="menu-links">
+            <a class="menu-btn" onclick="openSection('ecommerce')">E-Commerce</a>
+            <a class="menu-btn" onclick="openSection('lookbook')">Lookbook</a>
+            <a class="menu-btn" onclick="openSection('campana')">Campaña Bodegón</a>
+            <a class="menu-btn" onclick="openSection('contacto')">Contacto</a>
+        </div>
+    </div>
+
+    <div id="screen-content">
+
+        <div class="content-header" onclick="backToMenu()">
+            <img src="CK_logoB.png" alt="Logo" class="header-logo">
+        </div>
+
+        <div id="ecommerce" class="section-wrapper">
+            
+            <div class="product-layout">
+
+                <div class="info-left">
+                    <h3>Jeans baggy fit costura girada</h3>
+                    <p>Jeans no elásticos.</p>
+                    <ul>
+                        <li>Corte holgado</li>
+                        <li>Tiro medio</li>
+                        <li>Tejido rígido denim</li>
+                    </ul>
+                    <br>
+                    <p>Ref: 0621/379/400</p>
+                </div>
+
+                <div class="gallery-center" id="gallery-scroll">
+                    
+                    <img src="E-C_5.png" class="img-clone-last" alt="Jeans 5">
+
+                    <img src="E-C_1.png" class="img-real" alt="Jeans 1">
+                    <img src="E-C_2.png" class="img-real" alt="Jeans 2">
+                    <img src="E-C_3.png" class="img-real" alt="Jeans 3">
+                    <img src="E-C_4.png" class="img-real" alt="Jeans 4">
+                    <img src="E-C_5.png" class="img-real" alt="Jeans 5">
+                    <img src="E-C_1.png" class="img-clone-first" alt="Jeans 1">
+                
+                </div>
+
+                <div class="actions-right">
+                    <div class="price-tag">1350 € EUR</div>
+                    <div class="tax-info">Impuestos incluidos.</div>
+                    
+                    <select class="size-select">
+                        <option value="" disabled selected>SELECCIONE UNA TALLA</option>
+                        <option value="30">30</option>
+                        <option value="32">32</option>
+                        <option value="34">34</option>
+                        <option value="36">36</option>
+                        <option value="38">38</option>
+                        <option value="40">40</option>
+                        <option value="42">42</option>
+                        <option value="44">44</option>
+                        <option value="46">46</option>
+                    </select>
+
+                    <button class="btn-add">AÑADIR A LA BOLSA</button>
+                    <div class="wishlist-link">AÑADIR A LA LISTA DE DESEOS</div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="lookbook" class="section-wrapper">
+            <div class="lookbook-gallery">
+                <div class="look-slide">
+                    <img src="LK_1.jpg"
+                        alt="Look 1">
+                </div>
+
+                <div class="look-slide">
+                    <img src="LK_2.jpg "
+                        alt="Look 2">
+                </div>
+
+                <div class="look-slide">
+                    <img src="LK_3.jpg"
+                        alt="Look 3">
+                </div>
+            </div>
+        </div>
+        <div id="campana" class="section-wrapper">
+            <h1>BODEGÓN</h1>
+            <p>Contenido pendiente...</p>
+        </div>
+
+        <div id="contacto" class="section-wrapper">
+            <div class="contact-layout">
+                
+                <div class="left-column">
+                    <img src="elias_face.jpg" alt="Creador" class="creator-photo">
+                    
+                    <ul class="contact-list">
+                        <li><strong>Tel:</strong> +34 648 43 85 97</li>
+                        <li><strong>Email:</strong> eliasvigil@gmail.com</li>
+                        <li><strong>Instagram:</strong> @eliaasvigiil_</li>
+                        <li><strong>Studio:</strong> Barcelona, España</li>
+                    </ul>
+                </div>
+
+                <div class="right-column">
+                    <h2>Elias Vigil</h2>
+                    
+                    <div class="text-block">
+                        <p>
+                            Nacido en la intersección entre la arquitectura brutalista y la alta costura, 
+                            mi trabajo explora los límites del diseño visual moderno. Cada proyecto es una 
+                            declaración de intenciones, buscando siempre eliminar lo superfluo para 
+                            revelar la esencia pura de la forma y el material.
+                        </p>
+                        <p>
+                            Con base en Madrid pero con proyección global, colaboro con marcas que no 
+                            tienen miedo de romper las reglas establecidas. La estética no es solo 
+                            cómo se ve algo, sino cómo se siente y qué provoca en quien lo observa.
+                        </p>
+                        <p>
+                            "El diseño es el embajador silencioso de tu marca."
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const PASS = "1";
+        const VIDEO_DURATION = 3000;
+
+        const screenLogin = document.getElementById('screen-login');
+        const screenVideo = document.getElementById('screen-video');
+        const screenMenu = document.getElementById('screen-menu');
+        const screenContent = document.getElementById('screen-content');
+        const videoElement = document.getElementById('intro-vid');
+        const inputPass = document.getElementById('pass-input');
+
+        inputPass.addEventListener('keyup', function (e) {
+            if (e.key === 'Enter') checkPass();
+        });
+
+        function checkPass() {
+            if (inputPass.value === PASS) {
+                playVideoAndEnter();
+            } else {
+                document.getElementById('error-msg').style.display = 'block';
+            }
+        }
+
+        function playVideoAndEnter() {
+            const videoOverlay = document.getElementById('video-overlay');
+            
+            screenLogin.style.display = 'none';
+            screenVideo.style.display = 'flex';
+            
+            videoOverlay.classList.remove('fade-active');
+
+            videoElement.play().catch(() => finishVideo());
+
+
+            setTimeout(() => {
+                videoOverlay.classList.add('fade-active');
+            }, 1000);
+
+            videoElement.onended = finishVideo;
+            setTimeout(finishVideo, VIDEO_DURATION);
+        }
+
+        function finishVideo() {
+            if (screenVideo.style.display === 'none') return;
+            screenVideo.style.display = 'none';
+            screenMenu.style.display = 'flex';
+        }
+
+        function openSection(id) {
+            screenMenu.style.display = 'none';
+            screenContent.style.display = 'block';
+            document.querySelectorAll('.section-wrapper').forEach(el => el.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function backToMenu() {
+            screenContent.style.display = 'none';
+            screenMenu.style.display = 'flex';
+        }
+        // Del Menú a una Sección (CON CAMBIO DE TEMA BLANCO/NEGRO)
+        function openSection(id) {
+            screenMenu.style.display = 'none';
+            screenContent.style.display = 'block';
+            
+            // Referencias para cambiar estilos
+            const header = document.querySelector('.content-header');
+            const headerLogoImg = document.querySelector('.header-logo');
+            const contentDiv = document.getElementById('screen-content');
+
+            // Ocultar todas primero
+            document.querySelectorAll('.section-wrapper').forEach(el => el.classList.remove('active'));
+            // Mostrar la elegida
+            document.getElementById(id).classList.add('active');
+
+            // --- LÓGICA DE TEMAS ---
+            if (id === 'lookbook') {
+                // TEMA DARK (Para Lookbook)
+                contentDiv.style.backgroundColor = '#000'; // Fondo Negro
+                contentDiv.style.color = '#fff';           // Texto Blanco
+                
+                header.style.backgroundColor = '#000';     // Cabecera Negra
+                header.style.borderBottomColor = '#fff';   // Línea blanca
+                headerLogoImg.src = 'CK_logoW.png';        // Logo Blanco
+            } else {
+                // TEMA LIGHT (Para E-commerce, Contacto, etc.)
+                contentDiv.style.backgroundColor = '#fff'; // Fondo Blanco
+                contentDiv.style.color = '#000';           // Texto Negro
+                
+                header.style.backgroundColor = 'rgba(255,255,255,0.98)'; // Cabecera Blanca
+                header.style.borderBottomColor = '#000';   // Línea negra
+                headerLogoImg.src = 'CK_logoB.png';        // Logo Negro
+            }
+        }
+        function openSection(id) {
+            screenMenu.style.display = 'none';
+            screenContent.style.display = 'block';
+            
+            const header = document.querySelector('.content-header');
+            const headerLogoImg = document.querySelector('.header-logo');
+            const contentDiv = document.getElementById('screen-content');
+
+            // Resetear clases activas
+            document.querySelectorAll('.section-wrapper').forEach(el => el.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+
+            // --- LÓGICA DE TEMAS (3 COLORES) ---
+            
+            if (id === 'lookbook') {
+                // TEMA 1: NEGRO (Lookbook)
+                contentDiv.style.backgroundColor = '#000'; 
+                contentDiv.style.color = '#fff';
+                header.style.backgroundColor = '#000';
+                header.style.borderBottomColor = '#fff';
+                headerLogoImg.src = 'CK_logoW.png'; 
+
+            } else if (id === 'contacto') {
+                // TEMA 2: GRIS FUERTE (Contacto)
+                contentDiv.style.backgroundColor = '#2c2c2c'; /* Gris elegante */
+                contentDiv.style.color = '#fff';
+                header.style.backgroundColor = '#2c2c2c'; /* La cabecera se funde con el fondo */
+                header.style.borderBottomColor = '#fff';  /* Línea blanca */
+                headerLogoImg.src = 'CK_logoW.png';       /* Logo blanco */
+
+            } else {
+                // TEMA 3: BLANCO (E-commerce, Campaña, etc.)
+                contentDiv.style.backgroundColor = '#fff'; 
+                contentDiv.style.color = '#000';
+                header.style.backgroundColor = 'rgba(255,255,255,0.98)';
+                header.style.borderBottomColor = '#000';
+                headerLogoImg.src = 'CK_logoB.png'; 
+            }
+        }
+             
+       function playVideoAndEnter() {
+            const videoOverlay = document.getElementById('video-overlay');
+            
+            screenLogin.style.display = 'none';
+            screenVideo.style.display = 'flex';
+            
+            // Reiniciamos el overlay por si acaso (transparente)
+            videoOverlay.classList.remove('fade-active');
+
+            videoElement.play().catch(() => finishVideo());
+
+            // --- PLANIFICAR EL FADE OUT ---
+            // Si el video dura 4000ms, empezamos a oscurecer 1500ms antes del final
+            const tiempoParaOscurecer = VIDEO_DURATION - 1500; 
+            
+            setTimeout(() => {
+                videoOverlay.classList.add('fade-active');
+            }, tiempoParaOscurecer);
+
+            // --- FIN DEL VIDEO ---
+            // Salta al menú cuando acaba el tiempo total
+            videoElement.onended = finishVideo;
+            setTimeout(finishVideo, VIDEO_DURATION);
+        }
+       // --- LÓGICA DE SCROLL INFINITO MEJORADA ---
+        const gallery = document.getElementById('gallery-scroll');
+        
+        // 1. POSICIONAMIENTO INICIAL (Anti-Parpadeo)
+        function initGallery() {
+            if(gallery) {
+                // Desactivamos la animación un momento para que el salto sea instantáneo
+                gallery.style.scrollBehavior = 'auto'; 
+                
+                // Saltamos el primer clon (la altura de 1 foto)
+                const imgHeight = gallery.clientHeight; 
+                gallery.scrollTop = imgHeight; 
+                
+                // Hacemos visible la galería suavemente
+                // (Usamos un pequeño timeout para asegurar que el navegador ha procesado el salto)
+                setTimeout(() => {
+                    gallery.classList.add('loaded');
+                    gallery.style.scrollBehavior = 'smooth'; // Reactivamos suavidad
+                }, 50);
+            }
+        }
+
+        // Ejecutamos al cargar la página y al cambiar de tamaño (por si acaso)
+        // Usamos setTimeout para asegurar que el CSS ha calculado las alturas
+        setTimeout(initGallery, 100);
+        window.addEventListener('resize', initGallery);
+
+
+        // 2. BUCLE INFINITO (Loop)
+        if(gallery) {
+            gallery.addEventListener('scroll', () => {
+                const scrollTop = gallery.scrollTop;
+                const imgHeight = gallery.clientHeight;
+                const scrollHeight = gallery.scrollHeight;
+
+                // Si llegamos abajo del todo (al clon de la 1) -> Saltamos a la 1 real
+                if (scrollTop + imgHeight >= scrollHeight - 5) {
+                    gallery.style.scrollBehavior = 'auto';
+                    gallery.scrollTop = imgHeight; // Vuelta a la posición 1
+                    gallery.style.scrollBehavior = 'smooth';
+                }
+
+                // Si llegamos arriba del todo (al clon de la 5) -> Saltamos a la 5 real
+                if (scrollTop <= 0) {
+                    gallery.style.scrollBehavior = 'auto';
+                    // La posición de la 5 es: AlturaTotal - (2 * AlturaFoto)
+                    // (Restamos 2 porque hay que descontar el Clon 1 de abajo y el Clon 5 de arriba)
+                    gallery.scrollTop = scrollHeight - (imgHeight * 2);
+                    gallery.style.scrollBehavior = 'smooth';
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
