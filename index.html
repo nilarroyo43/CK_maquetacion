@@ -96,7 +96,10 @@
         /* --- 2. PANTALLA VIDEO --- */
         #screen-video {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: #000;
             display: none;
             z-index: 300;
@@ -104,11 +107,18 @@
             align-items: center;
         }
 
-        video { width: 100%; height: 100%; object-fit: cover; }
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
         #video-overlay {
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background-color: #000;
             opacity: 0;
             transition: opacity 1.5s ease;
@@ -127,11 +137,12 @@
             left: 0;
             width: 100%;
             height: 100%;
-            
+
             /* CAMBIO: Ponemos el GIF aquí en vez del color negro */
             background: url('assets/metro_gif.gif') no-repeat center center;
-            background-size: cover; /* Para que cubra toda la pantalla */
-            
+            background-size: cover;
+            /* Para que cubra toda la pantalla */
+
             display: none;
             flex-direction: column;
             align-items: center;
@@ -167,12 +178,17 @@
             animation: textEntrance 0.8s ease-out forwards;
         }
 
-        .menu-btn:hover { opacity: 0.6; }
+        .menu-btn:hover {
+            opacity: 0.6;
+        }
 
         /* --- 4. PANTALLA CONTENIDO --- */
         #screen-content {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background-color: #fff;
             display: none;
             z-index: 100;
@@ -185,9 +201,10 @@
             background: rgba(255, 255, 255, 0.98);
             padding: 15px 40px;
             z-index: 10;
-            border-bottom: none; /* Se controla con JS */
+            border-bottom: none;
+            /* Se controla con JS */
             display: grid;
-            grid-template-columns: 1fr auto 1fr; 
+            grid-template-columns: 1fr auto 1fr;
             align-items: center;
         }
 
@@ -198,23 +215,31 @@
         }
 
         .header-nav {
-            display: none; 
+            display: none;
             gap: 20px;
             font-size: 11px;
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        
+
         .header-nav a {
             text-decoration: none;
             color: #000;
             cursor: pointer;
         }
-        .header-nav a:hover { text-decoration: underline; }
 
-        .nav-left { justify-self: start; }
-        .nav-right { justify-self: end; }
+        .header-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .nav-left {
+            justify-self: start;
+        }
+
+        .nav-right {
+            justify-self: end;
+        }
 
         .live-help {
             position: fixed;
@@ -229,13 +254,20 @@
         }
 
         @media (max-width: 1100px) {
-            .header-nav { display: none !important; }
-            .content-header { display: flex; justify-content: center; }
+            .header-nav {
+                display: none !important;
+            }
+
+            .content-header {
+                display: flex;
+                justify-content: center;
+            }
         }
 
         .section-wrapper {
             padding: 40px 20px;
-            max-width: 1000px; /* Límite por defecto para otras secciones */
+            max-width: 1000px;
+            /* Límite por defecto para otras secciones */
             margin: 0 auto;
             display: none;
             text-align: center;
@@ -246,24 +278,24 @@
         }
 
         /* --- 5. ESTILOS E-COMMERCE (FULL WIDTH CORREGIDO) --- */
-        
+
         /* IMPORTANTE: Rompemos el límite de anchura SOLO para el e-commerce */
         #ecommerce.section-wrapper {
-            max-width: 100% !important; 
+            max-width: 100% !important;
             width: 100%;
-            padding: 0; 
+            padding: 0;
         }
 
         .product-layout {
             display: grid;
             /* Columnas seguras: Min 300px a los lados, 550px centro */
             grid-template-columns: minmax(300px, 1fr) 550px minmax(300px, 1fr);
-            gap: 40px; 
-            
+            gap: 40px;
+
             /* Ocupar casi toda la pantalla (95%) */
-            width: 95%; 
-            max-width: 2500px; 
-            
+            width: 95%;
+            max-width: 2500px;
+
             margin: 0 auto;
             align-items: center;
             height: 85vh;
@@ -277,47 +309,72 @@
             font-size: 13px;
             line-height: 2;
             color: #000;
-            padding-left: 0; /* Sin relleno extra */
+            padding-left: 0;
+            /* Sin relleno extra */
         }
 
-        .info-left h3 { 
-            font-size: 14px; 
-            font-weight: normal; 
-            margin: 0 0 25px 0; 
+        .info-left h3 {
+            font-size: 14px;
+            font-weight: normal;
+            margin: 0 0 25px 0;
             color: #000;
         }
 
         .info-subtitle {
-            margin-bottom: 25px; 
+            margin-bottom: 25px;
             display: block;
             font-weight: normal;
         }
 
-        .info-left ul { list-style: none; padding: 0; margin: 0; }
-        .info-left li { position: relative; padding-left: 12px; margin-bottom: 5px; }
-        .info-left li::before { content: "·"; position: absolute; left: 0; font-weight: bold; }
-        .info-bottom { margin-top: 50px; }
+        .info-left ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .info-left li {
+            position: relative;
+            padding-left: 12px;
+            margin-bottom: 5px;
+        }
+
+        .info-left li::before {
+            content: "·";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .info-bottom {
+            margin-top: 50px;
+        }
 
         /* Columna Central (Galería) */
         .gallery-center {
-            height: 100%; 
-            overflow-y: auto; 
-            scrollbar-width: none; 
+            height: 100%;
+            overflow-y: auto;
+            scrollbar-width: none;
             display: flex;
             flex-direction: column;
             scroll-snap-type: y mandatory;
             scroll-behavior: smooth;
             background-color: #fff;
-            opacity: 0; 
+            opacity: 0;
             transition: opacity 0.5s ease;
         }
-        .gallery-center.loaded { opacity: 1; }
-        .gallery-center::-webkit-scrollbar { display: none; }
+
+        .gallery-center.loaded {
+            opacity: 1;
+        }
+
+        .gallery-center::-webkit-scrollbar {
+            display: none;
+        }
 
         .gallery-center img {
             width: 100%;
-            height: 100%; 
-            object-fit: contain; 
+            height: 100%;
+            object-fit: contain;
             display: block;
             flex-shrink: 0;
             scroll-snap-align: start;
@@ -335,9 +392,22 @@
             padding-right: 0;
         }
 
-        .price-tag { font-size: 16px; font-weight: normal; }
-        .tax-info { font-size: 13px; color: #666; margin-top: -15px; }
-        .klarna-info { font-size: 13px; line-height: 1.5; width: 100%; }
+        .price-tag {
+            font-size: 16px;
+            font-weight: normal;
+        }
+
+        .tax-info {
+            font-size: 13px;
+            color: #666;
+            margin-top: -15px;
+        }
+
+        .klarna-info {
+            font-size: 13px;
+            line-height: 1.5;
+            width: 100%;
+        }
 
         .size-select {
             width: 100%;
@@ -349,7 +419,12 @@
             appearance: none;
         }
 
-        .button-row { display: flex; align-items: center; gap: 20px; width: 100%; }
+        .button-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+        }
 
         .btn-add {
             background-color: #000;
@@ -362,7 +437,10 @@
             cursor: pointer;
             transition: background 0.3s;
         }
-        .btn-add:hover { background-color: #333; }
+
+        .btn-add:hover {
+            background-color: #333;
+        }
 
         .wishlist-link {
             width: 40%;
@@ -373,8 +451,16 @@
             text-decoration: underline;
         }
 
-        .bottom-info { font-size: 12px; line-height: 1.6; margin-top: 10px; }
-        .shipping-info { color: #777; margin-top: 5px; }
+        .bottom-info {
+            font-size: 12px;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+        .shipping-info {
+            color: #777;
+            margin-top: 5px;
+        }
 
         @media (max-width: 1100px) {
             .product-layout {
@@ -383,9 +469,22 @@
                 overflow-y: visible;
                 padding: 20px;
             }
-            .gallery-center { order: 1; height: 70vh; margin-bottom: 30px;}
-            .actions-right { order: 2; padding: 0;}
-            .info-left { order: 3; padding: 0;}
+
+            .gallery-center {
+                order: 1;
+                height: 70vh;
+                margin-bottom: 30px;
+            }
+
+            .actions-right {
+                order: 2;
+                padding: 0;
+            }
+
+            .info-left {
+                order: 3;
+                padding: 0;
+            }
         }
 
         /* --- 6. ESTILOS LOOKBOOK DARK --- */
@@ -403,7 +502,10 @@
             max-width: 100%;
             object-fit: cover;
         }
-        .lookbook-gallery { width: 100%; }
+
+        .lookbook-gallery {
+            width: 100%;
+        }
 
         /* --- 7. ESTILOS CAMPAÑA BODEGÓN --- */
         .bodegon-layout {
@@ -415,37 +517,51 @@
             height: 85vh;
             padding: 20px;
             box-sizing: border-box;
-            align-items: center; 
+            align-items: center;
         }
 
         .bodegon-img {
             /* Ajustamos el ancho para que entre las dos no se pasen */
-            width: 80%; 
-            max-width: 650px; /* Límite para que no sean gigantes */
-            height: 65vh; 
-            object-fit: cover; 
+            width: 80%;
+            max-width: 650px;
+            /* Límite para que no sean gigantes */
+            height: 65vh;
+            object-fit: cover;
             display: block;
-            box-shadow: none; 
+            box-shadow: none;
         }
 
         /* Si quieres mantener el escalón (una arriba, otra abajo): */
-        .img-left { 
-            margin-right: -1px; /* Truco para asegurar que no haya línea blanca en medio */
+        .img-left {
+            margin-right: -1px;
+            /* Truco para asegurar que no haya línea blanca en medio */
         }
-        
-        .img-right { 
-            margin-left: -1px; 
+
+        .img-right {
+            margin-left: -1px;
         }
-        
+
         /* RESPONSIVE: En móvil una debajo de otra */
         @media (max-width: 768px) {
             .bodegon-layout {
                 flex-direction: column;
                 gap: 0;
             }
-            .bodegon-img { width: 100%; max-width: 100%; height: auto; }
-            .img-left { margin: 0; margin-bottom: -1px;}
-            .img-right { margin: 0; }
+
+            .bodegon-img {
+                width: 100%;
+                max-width: 100%;
+                height: auto;
+            }
+
+            .img-left {
+                margin: 0;
+                margin-bottom: -1px;
+            }
+
+            .img-right {
+                margin: 0;
+            }
         }
 
         /* --- 8. ESTILOS CONTACTO --- */
@@ -471,10 +587,13 @@
             width: 100%;
             height: auto;
             object-fit: block;
-            box-shadow: 15px 15px 0px rgba(0,0,0,0.4);
+            box-shadow: 15px 15px 0px rgba(0, 0, 0, 0.4);
         }
 
-        .right-column { flex-grow: 1; padding-top: 10px; }
+        .right-column {
+            flex-grow: 1;
+            padding-top: 10px;
+        }
 
         .right-column h2 {
             font-size: 36px;
@@ -485,66 +604,129 @@
             line-height: 1;
         }
 
-        .text-block { font-size: 16px; line-height: 1.8; opacity: 0.9; }
-        .text-block p { margin-bottom: 25px; }
+        .text-block {
+            font-size: 16px;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+
+        .text-block p {
+            margin-bottom: 25px;
+        }
 
         .contact-list {
-            list-style: none; padding: 0; margin: 0;
-            display: flex; flex-direction: column;
-            gap: 12px; font-size: 14px; letter-spacing: 1px;
-            border-top: 2px solid rgba(255,255,255,0.2);
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            font-size: 14px;
+            letter-spacing: 1px;
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
             padding-top: 20px;
         }
 
         .contact-list li {
-            display: flex; justify-content: space-between;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             padding-bottom: 5px;
         }
-        .contact-list strong { color: rgba(255,255,255,0.5); }
+
+        .contact-list strong {
+            color: rgba(255, 255, 255, 0.5);
+        }
 
         @media (max-width: 900px) {
-            .contact-layout { flex-direction: column; align-items: center; }
-            .left-column { width: 100%; max-width: 350px; }
-            .right-column { width: 100%; max-width: 500px; text-align: center; }
+            .contact-layout {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .left-column {
+                width: 100%;
+                max-width: 350px;
+            }
+
+            .right-column {
+                width: 100%;
+                max-width: 500px;
+                text-align: center;
+            }
         }
 
         /* --- 9. ANIMACIONES --- */
         @keyframes logoEntrance {
-            from { transform: scale(0.4); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+            from {
+                transform: scale(0.4);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
+
         @keyframes textEntrance {
-            from { transform: translateY(40px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from {
+                transform: translateY(40px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
-        
-        .menu-links a:nth-child(1) { animation-delay: 0.3s; }
-        .menu-links a:nth-child(2) { animation-delay: 0.5s; }
-        .menu-links a:nth-child(3) { animation-delay: 0.7s; }
-        .menu-links a:nth-child(4) { animation-delay: 0.9s; }
+
+        .menu-links a:nth-child(1) {
+            animation-delay: 0.3s;
+        }
+
+        .menu-links a:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        .menu-links a:nth-child(3) {
+            animation-delay: 0.7s;
+        }
+
+        .menu-links a:nth-child(4) {
+            animation-delay: 0.9s;
+        }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .section-wrapper.active {
             animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         }
 
-        .section-wrapper.active h1, 
+        .section-wrapper.active h1,
         .section-wrapper.active h2 {
-            opacity: 0; 
+            opacity: 0;
             animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.1s;
         }
-        .section-wrapper.active p, 
+
+        .section-wrapper.active p,
         .section-wrapper.active .text-block {
             opacity: 0;
             animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.2s;
         }
-        .section-wrapper.active img, 
-        .section-wrapper.active .product-layout, 
+
+        .section-wrapper.active img,
+        .section-wrapper.active .product-layout,
         .section-wrapper.active .lookbook-gallery,
         .section-wrapper.active .contact-layout {
             opacity: 0;
@@ -587,7 +769,7 @@
     <div id="screen-content">
 
         <div class="content-header" onclick="backToMenu()">
-            
+
             <div class="header-nav nav-left" id="nav-left">
                 <a>Ropa de Hombre</a>
                 <a>Ropa de Mujer</a>
@@ -612,9 +794,9 @@
 
                 <div class="info-left">
                     <h3>Jeans baggy fit costura girada</h3>
-                    
+
                     <span class="info-subtitle">Jeans no elásticos</span>
-                    
+
                     <ul>
                         <li>Corte holgado y amplio en toda la pierna</li>
                         <li>Tiro medio</li>
@@ -633,7 +815,7 @@
                 </div>
 
                 <div class="gallery-center" id="gallery-scroll">
-                    
+
                     <img src="assets/E-C_5.png" class="img-clone-last" alt="Jeans 5">
 
                     <img src="assets/E-C_1.png" class="img-real" alt="Jeans 1">
@@ -642,15 +824,15 @@
                     <img src="assets/E-C_4.png" class="img-real" alt="Jeans 4">
                     <img src="assets/E-C_5.png" class="img-real" alt="Jeans 5">
                     <img src="assets/E-C_1.png" class="img-clone-first" alt="Jeans 1">
-                
+
                 </div>
 
                 <div class="actions-right">
-                    <div class="price-tag">1350 € EUR</div>
+                    <div class="price-tag">70 € EUR</div>
                     <div class="tax-info">Impuestos y aranceles incluidos.</div>
-                    
+
                     <div class="klarna-info">
-                        3 pagos de 450,00 € al 0% de interés con klarna <u>Más información</u>
+                        3 pagos de 23,33 € al 0% de interés con klarna <u>Más información</u>
                     </div>
 
                     <select class="size-select">
@@ -664,14 +846,14 @@
                         <option value="42">42</option>
                         <option value="44">44</option>
                     </select>
-                    
+
                     <div class="button-row">
                         <button class="btn-add">AÑADIR A LA BOLSA</button>
                         <div class="wishlist-link">AÑADIR A LA LISTA DE DESEOS</div>
                     </div>
 
                     <div class="bottom-info">
-                        <p>El modelo mide 5 pies y 11" y lleva la talla 32. <u>Guía de tallas</u></p>
+                        <p>El modelo mide 5 pies y 11" y lleva la talla 38. <u>Guía de tallas</u></p>
                         <p class="shipping-info">Francia: Envío gratuito en pedidos superiores a 250 EUR.</p>
                     </div>
                 </div>
@@ -682,18 +864,15 @@
         <div id="lookbook" class="section-wrapper">
             <div class="lookbook-gallery">
                 <div class="look-slide">
-                    <img src="assets/LK_1.png"
-                        alt="Look 1">
+                    <img src="assets/LK_1.png" alt="Look 1">
                 </div>
 
                 <div class="look-slide">
-                    <img src="assets/LK_2.png"
-                        alt="Look 2">
+                    <img src="assets/LK_2.png" alt="Look 2">
                 </div>
 
                 <div class="look-slide">
-                    <img src="assets/LK_3.png"
-                        alt="Look 3">
+                    <img src="assets/LK_3.png" alt="Look 3">
                 </div>
             </div>
         </div>
@@ -707,10 +886,10 @@
 
         <div id="contacto" class="section-wrapper">
             <div class="contact-layout">
-                
+
                 <div class="left-column">
                     <img src="assets/elias_face.png" alt="Creador" class="creator-photo">
-                    
+
                     <ul class="contact-list">
                         <li><strong>Tel:</strong> +34 648 43 85 97</li>
                         <li><strong>Email:</strong> eliasvigil@gmail.com</li>
@@ -721,21 +900,17 @@
 
                 <div class="right-column">
                     <h2>Elias Vigil</h2>
-                    
+
                     <div class="text-block">
                         <p>
-                            Nacido en la intersección entre la arquitectura brutalista y la alta costura, 
-                            mi trabajo explora los límites del diseño visual moderno. Cada proyecto es una 
-                            declaración de intenciones, buscando siempre eliminar lo superfluo para 
-                            revelar la esencia pura de la forma y el material.
+                            Hi, I’m Elías, I’m 20 years old and I study fashion. I’m curious, very observant, and a bit
+                            obsessed with details. I like understanding how things work, testing, messing up, and trying
+                            again until it feels right. 
                         </p>
                         <p>
-                            Con base en Madrid pero con proyección global, colaboro con marcas que no 
-                            tienen miedo de romper las reglas establecidas. La estética no es solo 
-                            cómo se ve algo, sino cómo se siente y qué provoca en quien lo observa.
-                        </p>
-                        <p>
-                            "El diseño es el embajador silencioso de tu marca."
+                            I work mostly by intuition, then overthink it just enough to
+                            make it better.I enjoy creating with intention, keeping things honest, and trusting the
+                            process.
                         </p>
                     </div>
                 </div>
@@ -744,10 +919,10 @@
         </div>
     </div>
 
-<script>
+    <script>
         // --- CONFIGURACIÓN ---
         const PASS = "1234"; // Contraseña
-        const VIDEO_DURATION = 3000; 
+        const VIDEO_DURATION = 3000;
 
         // --- REFERENCIAS DOM ---
         const screenLogin = document.getElementById('screen-login');
@@ -773,15 +948,15 @@
         // --- TRANSICIÓN VIDEO -> MENÚ ---
         function playVideoAndEnter() {
             const videoOverlay = document.getElementById('video-overlay');
-            
+
             screenLogin.style.display = 'none';
             screenVideo.style.display = 'flex';
-            
+
             videoOverlay.classList.remove('fade-active');
             videoElement.play().catch(() => finishVideo());
 
             // Fade Out
-            const tiempoParaOscurecer = VIDEO_DURATION - 1500; 
+            const tiempoParaOscurecer = VIDEO_DURATION - 1500;
             setTimeout(() => {
                 videoOverlay.classList.add('fade-active');
             }, tiempoParaOscurecer);
@@ -805,7 +980,7 @@
         function openSection(id) {
             screenMenu.style.display = 'none';
             screenContent.style.display = 'block';
-            
+
             // Referencias
             const header = document.querySelector('.content-header');
             const headerLogoImg = document.getElementById('header-logo-img');
@@ -819,21 +994,21 @@
             document.getElementById(id).classList.add('active');
 
             // --- LÓGICA DE ESTILOS SEGÚN SECCIÓN ---
-            
+
             if (id === 'ecommerce') {
                 // TEMA BLANCO (E-Commerce)
                 contentDiv.style.backgroundColor = '#fff';
                 contentDiv.style.color = '#000';
-                
+
                 header.style.backgroundColor = 'rgba(255,255,255,0.98)';
-                headerLogoImg.src = 'assets/CK_logoB.png'; 
-                
+                headerLogoImg.src = 'assets/CK_logoB.png';
+
                 // 1. RECUPERAMOS LA LÍNEA NEGRA
                 header.style.borderBottom = '2px solid #000';
 
                 // 2. ACTIVAMOS MODO GRID (3 COLUMNAS) PARA QUE QUEPAN LOS MENÚS
-                header.style.display = 'grid'; 
-                
+                header.style.display = 'grid';
+
                 // Mostrar menús laterales
                 navLeft.style.display = 'flex';
                 navRight.style.display = 'flex';
@@ -850,7 +1025,7 @@
                 // Al poner Flex y Justify Center, el logo se va al medio matemático
                 header.style.display = 'flex';
                 header.style.justifyContent = 'center';
-                
+
                 if (id === 'lookbook' || id === 'campana') {
                     // TEMA NEGRO
                     contentDiv.style.backgroundColor = '#000';
@@ -874,12 +1049,12 @@
 
         // --- SCROLL INFINITO ---
         const gallery = document.getElementById('gallery-scroll');
-        
+
         function initGallery() {
-            if(gallery) {
-                gallery.style.scrollBehavior = 'auto'; 
-                const imgHeight = gallery.clientHeight; 
-                gallery.scrollTop = imgHeight; 
+            if (gallery) {
+                gallery.style.scrollBehavior = 'auto';
+                const imgHeight = gallery.clientHeight;
+                gallery.scrollTop = imgHeight;
                 setTimeout(() => {
                     gallery.classList.add('loaded');
                     gallery.style.scrollBehavior = 'smooth';
@@ -889,7 +1064,7 @@
         setTimeout(initGallery, 100);
         window.addEventListener('resize', initGallery);
 
-        if(gallery) {
+        if (gallery) {
             gallery.addEventListener('scroll', () => {
                 const scrollTop = gallery.scrollTop;
                 const imgHeight = gallery.clientHeight;
@@ -897,7 +1072,7 @@
 
                 if (scrollTop + imgHeight >= scrollHeight - 5) {
                     gallery.style.scrollBehavior = 'auto';
-                    gallery.scrollTop = imgHeight; 
+                    gallery.scrollTop = imgHeight;
                     gallery.style.scrollBehavior = 'smooth';
                 }
                 if (scrollTop <= 0) {
